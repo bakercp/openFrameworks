@@ -829,8 +829,8 @@ vector<ofVideoDeviceInfo> ofQTKitGrabber::getDeviceList(){
 	int deviceCount = 0;
 	for (QTCaptureDevice* object in devices){
 		videoDevices.push_back(ofVideoDeviceInfo());
-		videoDevices[deviceCount].deviceID = deviceCount;
-		videoDevices[deviceCount].deviceName = [[object description] UTF8String];
+		videoDevices[deviceCount].ID = deviceCount;
+		videoDevices[deviceCount].name = [[object description] UTF8String];
 		videoDevices[deviceCount].isAvailable = object.isConnected && !object.isInUseByAnotherApplication;
 		videoDevices[deviceCount].isOpen = object.isOpen;
 		deviceCount++;

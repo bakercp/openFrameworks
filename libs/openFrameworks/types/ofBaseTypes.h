@@ -191,15 +191,15 @@ public:
 class ofVideoDeviceInfo {
   public:
 	ofVideoDeviceInfo() :
-        deviceName(""),
-        deviceID(0),
+        name(""),
+        ID(0),
         isAvailable(false),
         isOpen(false)
     {
 	}
 
-	string deviceName;
-	int deviceID;	
+	string name;
+	int ID;
 	bool isAvailable;
 	bool isOpen;
 };

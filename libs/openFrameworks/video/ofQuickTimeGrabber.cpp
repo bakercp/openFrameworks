@@ -296,7 +296,7 @@ vector<ofVideoDeviceInfo> ofQuickTimeGrabber::getDeviceList(){
 			nameRec = (*deviceList)->entry[i];
 			SGDeviceInputList deviceInputList = nameRec.inputs;
 			ofVideoDeviceInfo device;
-			device.deviceID = deviceCount;
+			device.ID = deviceCount;
 			
 			int numInputs = 0;
 			if( deviceInputList ) numInputs = ((*deviceInputList)->count);
@@ -327,7 +327,7 @@ vector<ofVideoDeviceInfo> ofQuickTimeGrabber::getDeviceList(){
 
 			}else{
 				ofLogNotice() << "(unavailable) device[" << deviceCount << "] " << p2cstr(pascalName);
-				device.deviceName = string(p2cstr(pascalName));
+				device.name = string(p2cstr(pascalName));
 				
 				device.isAvailable = false;
 				device.isOpen = false;
