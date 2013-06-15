@@ -248,6 +248,8 @@ bool ofQuickTimeGrabber::initGrabber(int w, int h){
 //--------------------------------------------------------------------
 vector<ofVideoDeviceInfo> ofQuickTimeGrabber::getDeviceList(){
 
+    vector<ofVideoDeviceInfo> videoDevices;
+
 	//---------------------------------
 	#ifdef OF_VIDEO_CAPTURE_QUICKTIME
 	//---------------------------------
@@ -287,7 +289,6 @@ vector<ofVideoDeviceInfo> ofQuickTimeGrabber::getDeviceList(){
 		//this means our the device ID we use for selection has to count both capture 'devices' and their 'inputs'
 		//this needs to be the same in our init grabber method so that we select the device we ask for
 		int deviceCount = 0;
-		vector<ofVideoDeviceInfo> videoDevices;
 		ofLog(OF_LOG_NOTICE, "listing available capture devices");
 		for(int i = 0 ; i < (*deviceList)->count ; ++i)
 		{
