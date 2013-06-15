@@ -604,11 +604,20 @@ void ofGstVideoGrabber::setVerbose(bool bVerbose){
 	//else ofLogResetTopicLogLevel("ofGstVideoGrabber");
 }
 
-void ofGstVideoGrabber::listDevices(){
+vector<ofVideoDeviceInfo> ofGstVideoGrabber::getDeviceList(){
+	vector<ofVideoDeviceInfo> devices;
+
 	if(!camData.bInited) get_video_devices(camData);
+	
 	for(unsigned i=0; i<camData.webcam_devices.size(); i++){
-		cout << "device " << i << ": " + camData.webcam_devices[i].video_device + ": " + camData.webcam_devices[i].product_name << endl;
+		ofVideoDeviceInfo deviceInfo;
+		deviceInfo.ID = i;
+		deviceInfo.name = camData.webcam_devices[i].video_device;
+		deviceInfo.isAvailable = true; // TODO: this is not true
+		deviceInfo.isOpen = false; // TODO: this is not true
 	}
+
+	return devices;
 }
 
 void ofGstVideoGrabber::setDeviceID(int id){

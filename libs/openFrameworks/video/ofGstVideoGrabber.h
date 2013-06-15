@@ -40,7 +40,7 @@ public:
 	
 	void videoSettings(){};//TODO: what is this??
 
-	void listDevices();
+	vector<ofVideoDeviceInfo> getDeviceList();
 	void setDeviceID(int id);
 	void setDesiredFrameRate(int framerate);
 	bool initGrabber(int w, int h);
