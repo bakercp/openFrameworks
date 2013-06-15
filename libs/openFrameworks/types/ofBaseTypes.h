@@ -190,11 +190,13 @@ public:
 
 class ofVideoDeviceInfo {
   public:
-	ofVideoDeviceInfo(){
-		deviceID = 0;	
-		isAvailable = false;
-		isOpen = false;
+	ofVideoDeviceInfo() :
+        deviceID(0),
+        isAvailable(false),
+        isOpen(false)
+    {
 	}
+
 	string deviceName;
 	int deviceID;	
 	bool isAvailable;
@@ -210,7 +212,8 @@ class ofBaseVideoGrabber: virtual public ofBaseVideo{
 	virtual ~ofBaseVideoGrabber();
 
 	//needs implementing
-	virtual vector<ofVideoDeviceInfo>	listDevices() = 0;		
+	virtual vector<ofVideoDeviceInfo>	getDeviceList() = 0;
+
 	virtual bool						initGrabber(int w, int h) = 0;
 	virtual void						update() = 0;
 	virtual bool						isFrameNew() = 0;

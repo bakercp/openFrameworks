@@ -819,7 +819,7 @@ bool ofQTKitGrabber::hasPreview(){
 // but that requires updating the base class...perhaps we could
 // then have a ofBaseDevice class to be used for enumerating any 
 // type of device for video, sound, serial devices etc etc???
-vector<ofVideoDeviceInfo> ofQTKitGrabber::listDevices(){
+vector<ofVideoDeviceInfo> ofQTKitGrabber::getDeviceList(){
     //listVideoDevices();
     vector<ofVideoDeviceInfo> videoDevices;
 	

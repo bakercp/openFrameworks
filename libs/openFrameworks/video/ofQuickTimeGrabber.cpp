@@ -160,7 +160,7 @@ bool ofQuickTimeGrabber::initGrabber(int w, int h){
 		//then lets try to setup ANY device!
 		if(deviceIsSelected == false){
 			//lets list available devices
-			listDevices();
+			getDeviceList();
 
 			setDeviceID(0);
 			deviceIsSelected = qtSelectDevice(deviceID, false);
@@ -246,7 +246,7 @@ bool ofQuickTimeGrabber::initGrabber(int w, int h){
 }
 
 //--------------------------------------------------------------------
-vector<ofVideoDeviceInfo> ofQuickTimeGrabber::listDevices(){
+vector<ofVideoDeviceInfo> ofQuickTimeGrabber::getDeviceList(){
 
 	//---------------------------------
 	#ifdef OF_VIDEO_CAPTURE_QUICKTIME
@@ -345,6 +345,7 @@ vector<ofVideoDeviceInfo> ofQuickTimeGrabber::listDevices(){
 	//---------------------------------
 	#endif
 	//---------------------------------
+
 	return videoDevices;
 }
 
@@ -662,7 +663,7 @@ bool ofQuickTimeGrabber::qtCloseSeqGrabber(){
 bool ofQuickTimeGrabber::qtSelectDevice(int deviceNumber, bool didWeChooseADevice){
 
 	//note - check for memory freeing possibly needed for the all SGGetChannelDeviceList mac stuff
-	// also see notes in listDevices() regarding new enunemeration method.
+	// also see notes in getDeviceList() regarding new enunemeration method.
 
 	//Generate a device list and enumerate
 	//all devices availble to the channel

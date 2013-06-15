@@ -122,8 +122,13 @@ ofPixelFormat ofVideoGrabber::getPixelFormat(){
 
 //--------------------------------------------------------------------
 vector<ofVideoDeviceInfo> ofVideoGrabber::listDevices(){
+    return getDeviceList();
+}
+
+//--------------------------------------------------------------------
+vector<ofVideoDeviceInfo> ofVideoGrabber::getDeviceList(){
 	if(	grabber != NULL ){
-		return grabber->listDevices();
+		return grabber->getDeviceList();
 	}
 }
 

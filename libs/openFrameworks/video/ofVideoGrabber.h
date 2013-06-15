@@ -47,7 +47,9 @@ class ofVideoGrabber : public ofBaseVideoGrabber,public ofBaseVideoDraws{
 		void						setGrabber(ofPtr<ofBaseVideoGrabber> newGrabber);
 		ofPtr<ofBaseVideoGrabber>	getGrabber();
 
-		vector<ofVideoDeviceInfo> 	listDevices();
+        OF_DEPRECATED_MSG("Use getDeviceList() instead.", vector<ofVideoDeviceInfo> listDevices(); );
+        vector<ofVideoDeviceInfo> 	getDeviceList();
+
 		bool						isFrameNew();
 		void						update();
 		OF_DEPRECATED_MSG("Use ofVideoGrabber::update() instead.", void grabFrame());
