@@ -58,10 +58,20 @@ JNIEnv * ofGetJNIEnv(){
 		ofLogError("ofAppAndroidWindow") << "couldn't get java virtual machine";
 		return NULL;
 	}
-	if (vm->GetEnv((void**) &env, JNI_VERSION_1_4) != JNI_OK) {
+
+	int getEnvStat = vm->GetEnv((void**) &env, JNI_VERSION_1_4);
+
+	if (getEnvStat == JNI_EDETACHED) {
+
+		if (vm->AttachCurrentThread(&env, NULL) != 0) {
+			ofLogError("ofAppAndroidWindow") << "couldn't get environment using GetEnv()";
+			return NULL;
+		}
+	} else if (getEnvStat != JNI_OK) {
 		ofLogError("ofAppAndroidWindow") << "couldn't get environment using GetEnv()";
 		return NULL;
 	}
+
 	return env;
 }
 
@@ -405,12 +415,15 @@ Java_cc_openframeworks_OFAndroid_render( JNIEnv*  env, jclass  thiz )
 }
 
 void
-Java_cc_openframeworks_OFAndroid_onTouchDown(JNIEnv*  env, jclass  thiz, jint id,jfloat x,jfloat y,jfloat pressure){
+Java_cc_openframeworks_OFAndroid_onTouchDown(JNIEnv*  env, jclass  thiz, jint id,jfloat x,jfloat y,jfloat pressure,jfloat majoraxis,jfloat minoraxis,jfloat angle){
 	ofTouchEventArgs touch;
 	touch.id = id;
 	touch.x = x;
 	touch.y = y;
 	touch.pressure = pressure;
+	touch.majoraxis = majoraxis;
+	touch.minoraxis = minoraxis;
+	touch.angle = angle;
 	touch.type = ofTouchEventArgs::down;
 	if(threadedTouchEvents){
 		window->events().notifyMousePressed(x,y,0);
@@ -423,12 +436,15 @@ Java_cc_openframeworks_OFAndroid_onTouchDown(JNIEnv*  env, jclass  thiz, jint id
 }
 
 void
-Java_cc_openframeworks_OFAndroid_onTouchUp(JNIEnv*  env, jclass  thiz, jint id,jfloat x,jfloat y,jfloat pressure){
+Java_cc_openframeworks_OFAndroid_onTouchUp(JNIEnv*  env, jclass  thiz, jint id,jfloat x,jfloat y,jfloat pressure,jfloat majoraxis,jfloat minoraxis,jfloat angle){
 	ofTouchEventArgs touch;
 	touch.id = id;
 	touch.x = x;
 	touch.y = y;
 	touch.pressure = pressure;
+	touch.majoraxis = majoraxis;
+	touch.minoraxis = minoraxis;
+	touch.angle = angle;
 	touch.type = ofTouchEventArgs::up;
 	if(threadedTouchEvents){
 		window->events().notifyMouseReleased(x,y,0);
@@ -458,12 +474,15 @@ Java_cc_openframeworks_OFAndroid_onTouchCancelled(JNIEnv*  env, jclass  thiz, ji
 }
 
 void
-Java_cc_openframeworks_OFAndroid_onTouchMoved(JNIEnv*  env, jclass  thiz, jint id,jfloat x,jfloat y,jfloat pressure){
+Java_cc_openframeworks_OFAndroid_onTouchMoved(JNIEnv*  env, jclass  thiz, jint id,jfloat x,jfloat y,jfloat pressure,jfloat majoraxis,jfloat minoraxis,jfloat angle){
 	ofTouchEventArgs touch;
 	touch.id = id;
 	touch.x = x;
 	touch.y = y;
 	touch.pressure = pressure;
+	touch.majoraxis = majoraxis;
+	touch.minoraxis = minoraxis;
+	touch.angle = angle;
 	touch.type = ofTouchEventArgs::move;
 	if(threadedTouchEvents){
 		window->events().notifyMouseMoved(x,y);
