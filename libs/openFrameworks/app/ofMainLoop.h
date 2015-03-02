@@ -16,7 +16,6 @@ public:
 		allowMultiWindow = Window::allowsMultiWindow();
 		if(Window::doesLoop()){
 		    windowLoop = Window::loop;
-		    
 		}
 		if(Window::needsPolling()){
 		    pollEvents = Window::pollEvents;
@@ -37,6 +36,8 @@ public:
 	ofCoreEvents & events();
 	void shouldClose(int status);
 	shared_ptr<ofAppBaseWindow> getCurrentWindow();
+	void setCurrentWindow(shared_ptr<ofAppBaseWindow> window);
+	void setCurrentWindow(ofAppBaseWindow * window);
 	shared_ptr<ofBaseApp> getCurrentApp();
 	void setEscapeQuitsLoop(bool quits);
 
@@ -45,7 +46,7 @@ private:
 	void keyPressed(ofKeyEventArgs & key);
 	map<shared_ptr<ofAppBaseWindow>,shared_ptr<ofBaseApp> > windowsApps;
 	bool bShouldClose;
-	shared_ptr<ofAppBaseWindow> currentWindow;
+	weak_ptr<ofAppBaseWindow> currentWindow;
 	int status;
 	bool allowMultiWindow;
 	void (*windowLoop)(void);
