@@ -39,7 +39,7 @@ architectures:
   * x86_64
   * ARMv6l
   * ARMv7l
-	
+
 # Microsoft Windows #
 
 versions: Win7 - Win10
@@ -55,12 +55,12 @@ notes:
 
 # OS X #
 
-versions: 10.7 - 10.10 (FAT Bundle)
+versions: 10.8 - 10.10 (FAT Bundle)
 
 architectures:
   * x86 (with libc++)
   * x86_64 (with libc++)
 
 notes:
-  * QTKitVideo pipeline will be deprecated, but essential for 10.7 support.
+  * QTKitVideo pipeline will be deprecated.
   * 10.8 recommended minimum (to use Xcode 5)
