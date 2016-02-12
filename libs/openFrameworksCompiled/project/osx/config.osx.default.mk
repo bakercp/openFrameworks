@@ -70,7 +70,7 @@ PLATFORM_REQUIRED_ADDONS =
 ##########################################################################################
 
 ifndef MAC_OS_MIN_VERSION
-	MAC_OS_MIN_VERSION = 10.7
+	MAC_OS_MIN_VERSION = 10.8
 endif
 
 ifndef MAC_OS_STD_LIB
@@ -92,14 +92,14 @@ ifeq ($(shell xcode-select -print-path 2> /dev/null; echo $$?),0)
 	MAC_OS_SDK_PATH=$(MAC_OS_XCODE_ROOT)/Platforms/MacOSX.platform/Developer/SDKs
 
 	ifndef MAC_OS_SDK
-		ifeq ($(wildcard $(MAC_OS_SDK_PATH)/MacOSX10.10.sdk),$(MAC_OS_SDK_PATH)/MacOSX10.10.sdk)
+		ifeq ($(wildcard $(MAC_OS_SDK_PATH)/MacOSX10.11.sdk),$(MAC_OS_SDK_PATH)/MacOSX10.11.sdk)
+			MAC_OS_SDK=10.11
+		else ifeq ($(wildcard $(MAC_OS_SDK_PATH)/MacOSX10.10.sdk),$(MAC_OS_SDK_PATH)/MacOSX10.10.sdk)
 			MAC_OS_SDK=10.10
 		else ifeq ($(wildcard $(MAC_OS_SDK_PATH)/MacOSX10.9.sdk),$(MAC_OS_SDK_PATH)/MacOSX10.9.sdk)
 			MAC_OS_SDK=10.9
 		else ifeq ($(wildcard $(MAC_OS_SDK_PATH)/MacOSX10.8.sdk),$(MAC_OS_SDK_PATH)/MacOSX10.8.sdk)
 			MAC_OS_SDK=10.8
-		else ifeq ($(wildcard $(MAC_OS_SDK_PATH)/MacOSX10.7.sdk),$(MAC_OS_SDK_PATH)/MacOSX10.7.sdk)
-			MAC_OS_SDK=10.7
 		endif
 	endif
 
@@ -389,11 +389,11 @@ afterplatform: $(TARGET_NAME)
 
 	@mv $(TARGET) bin/$(BIN_NAME).app/Contents/MacOS
 	@cp -r $(OF_EXPORT_PATH)/$(ABI_LIB_SUBPATH)/libs/* bin/$(BIN_NAME).app/Contents/MacOS
-	
-	
+
+
 ifdef PROJECT_AFTER_OSX
 	${PROJECT_AFTER_OSX}
-endif	
+endif
 
 	@echo
 	@echo "     compiling done"
