@@ -6,7 +6,7 @@ include Makefile.srcs
 
 # Update this based on your installed SDKs
 MACOSX_SDK=$(shell xcrun -sdk macosx --show-sdk-version)
-MACOSX_MIN_SDK = 10.7
+MACOSX_MIN_SDK = 10.8
 
 # Find SDK path via xcode-select, backwards compatible with Xcode vers < 4.5
 MACOSX_SYSROOT = $(shell xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(MACOSX_SDK).sdk

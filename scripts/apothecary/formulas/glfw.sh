@@ -60,8 +60,9 @@ function build() {
 				-DBUILD_SHARED_LIBS=OFF \
 				-DCMAKE_C_COMPILER=/mingw32/bin/gcc.exe
 
- 		make -j${PARALLEL_MAKE}
- 		make install
+		make clean
+		make -j${PARALLEL_MAKE}
+		make install
 	else
 		# *nix build system
 
@@ -74,10 +75,11 @@ function build() {
 				-DGLFW_BUILD_EXAMPLES=OFF \
 				-DBUILD_SHARED_LIBS=OFF \
 				-DCMAKE_BUILD_TYPE=Release \
-				-DGLFW_BUILD_UNIVERSAL=ON 
+				-DGLFW_BUILD_UNIVERSAL=ON
 
- 		make clean
- 		make -j${PARALLEL_MAKE}
+		make clean
+		make -j${PARALLEL_MAKE}
+		make install
 	fi
 }
 
