@@ -4,6 +4,7 @@
 | | | |\__, ||__ <
 | |_| |  / / ___) |
  \___(_)/_(_)____/
+                           
 
 OF 0.9.3
 ========                          
@@ -15,15 +16,16 @@ OF 0.9.3
 
 ------------------------------------------------------------------------------
 
-CORE
-----
-
 PLATFORM SPECIFIC
 -----------------
+
+### msys2
+   / FreeImage to freeimage dependencies fix
 
 ### osx
    - remove support for 10.7
    / recompiled all 3rd party static libs for 10.8+
+   / FreeImage ABI fix.
 
  _____     _____     _____
 |  _  |   |  _  |   / __  \
