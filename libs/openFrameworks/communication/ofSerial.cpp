@@ -262,9 +262,9 @@ bool ofSerial::setup(){
 }
 
 //----------------------------------------------------------------
-bool ofSerial::setup(int deviceNumber, int baud){
+bool ofSerial::setup(std::size_t deviceNumber, int baud){
 	buildDeviceList();
-	if(deviceNumber < (int)devices.size()){
+	if(deviceNumber < devices.size()){
 		return setup(devices[deviceNumber].devicePath, baud);
 	} else {
 		ofLogError("ofSerial") << "couldn't find device " << deviceNumber << ", only " << devices.size() << " devices found";

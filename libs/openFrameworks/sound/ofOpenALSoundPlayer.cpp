@@ -1007,7 +1007,7 @@ float * ofOpenALSoundPlayer::getSystemSpectrum(int bands){
 
 // ----------------------------------------------------------------------------
 void ofOpenALSoundPlayer::runWindow(vector<float> & signal){
-	for(int i = 0; i < (int)signal.size(); i++)
+	for(std::size_t i = 0; i < signal.size(); i++)
 		signal[i] *= window[i];
 }
 

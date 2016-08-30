@@ -440,7 +440,7 @@ void ofFbo::clear() {
 		fboTextures = 0;
 	}
 	textures.clear();
-	for (int i=0; i < (int)colorBuffers.size(); i++) {
+	for (std::size_t i=0; i < colorBuffers.size(); i++) {
 		releaseRB(colorBuffers[i]);
 	}
 	colorBuffers.clear();
@@ -913,7 +913,7 @@ void ofFbo::setActiveDrawBuffers(const vector<int>& ids){
     int numBuffers = activeDrawBuffers.size();
 	activeDrawBuffers.clear();
 	activeDrawBuffers.resize(numBuffers, GL_NONE); // we initialise the vector with GL_NONE, so a buffer will not be written to unless activated.
-    for(int i=0; i < (int)ids.size(); i++){
+	for(std::size_t i=0; i < ids.size(); i++){
       int id = ids[i];
         if (id < getNumTextures()){
             GLenum e = GL_COLOR_ATTACHMENT0 + id;

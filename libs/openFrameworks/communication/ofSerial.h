@@ -123,7 +123,7 @@ public:
 	/// ofSerial mySerial;
 	/// mySerial.setup(0, 9600);
 	/// ~~~~
-	bool setup(int deviceNumber, int baudrate);
+	bool setup(std::size_t deviceNumber, int baudrate);
 
 	bool isInitialized() const;
 

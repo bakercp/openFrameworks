@@ -1145,7 +1145,7 @@ std::size_t ofDirectory::listDir(){
 	}        
 
 	if(ofGetLogLevel() == OF_LOG_VERBOSE){
-		for(int i = 0; i < (int)size(); i++){
+		for(std::size_t i = 0; i < size(); i++){
 			ofLogVerbose() << "\t" << getName(i);
 		}
 		ofLogVerbose() << "listed " << size() << " files in \"" << originalDirectory << "\"";

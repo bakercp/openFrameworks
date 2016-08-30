@@ -575,8 +575,8 @@ T ofPolyline_<T>::getClosestPoint(const T& target, unsigned int* nearestIndex) c
 	if(polyline.isClosed()) {
 		lastPosition++;
 	}
-	for(int i = 0; i < (int) lastPosition; i++) {
-		bool repeatNext = i == (int) (polyline.size() - 1);
+	for(std::size_t i = 0; i < lastPosition; i++) {
+		bool repeatNext = i == (polyline.size() - 1);
 		
 		const auto& cur = polyline[i];
 		const auto& next = repeatNext ? polyline[0] : polyline[i + 1];
@@ -733,7 +733,7 @@ template<class T>
 void ofPolyline_<T>::simplify(float tol){
     if(points.size() < 2) return;
     
-	int n = size();
+	std::size_t n = size();
 	
 	if(n == 0) {
 		return;
@@ -742,7 +742,7 @@ void ofPolyline_<T>::simplify(float tol){
 	vector <T> sV;
 	sV.resize(n);
     
-    int    i, k, m, pv;            // misc counters
+    std::size_t i, k, m, pv;            // misc counters
     float  tol2 = tol * tol;       // tolerance squared
 	vector<T> vt;
     vector<int> mk;
@@ -770,7 +770,7 @@ void ofPolyline_<T>::simplify(float tol){
     }
     
 	//get rid of the unused points
-	if( m < (int)sV.size() ){
+	if( m < sV.size() ){
 		points.assign( sV.begin(),sV.begin()+m );
 	}else{
 		points = sV;
