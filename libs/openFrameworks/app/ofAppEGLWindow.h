@@ -17,7 +17,7 @@
 #include <stdlib.h>  // malloc
 #include <math.h>
 #include <fcntl.h>  // open fcntl
-#include <unistd.h> // read close 
+#include <unistd.h> // read close
 #include <linux/joystick.h>
 
 #include "linux/kd.h"	// keyboard stuff...
@@ -106,7 +106,7 @@ public:
 	virtual void disableSetupScreen();
 
 	virtual void setVerticalSync(bool enabled);
-	
+
 	struct Settings: public ofGLESWindowSettings {
 		public:
 		ofAppEGLWindowType eglWindowPreference;  // what window type is preferred?
@@ -170,7 +170,7 @@ protected:
 	void checkEvents();
 	ofImage mouseCursor;
 
-	// TODO: getters and setters?  OR automatically set based on 
+	// TODO: getters and setters?  OR automatically set based on
 	// OS or screen size?  Should be changed when screen is resized?
 	float mouseScaleX;  ///< \brief Amount by which to mouse movements along the X axis.
 	float mouseScaleY;  ///< \brief Amount by which to mouse movements along the Y axis.
@@ -180,10 +180,10 @@ protected:
 	// void setMouseScaleX(float x);
 	// float getMouseScaleY() const;
 	// void setMouseScaleY(float y);
-	
+
 	bool hasMouse() { return mouseDetected; }
 	bool hasKeyboard() { return keyboardDetected; }
-	
+
 
 //------------------------------------------------------------
 // EGL
@@ -206,7 +206,7 @@ protected:
 //------------------------------------------------------------
 // PLATFORM SPECIFIC WINDOWING
 //------------------------------------------------------------
-	
+
 //------------------------------------------------------------
 // WINDOWING
 //------------------------------------------------------------
@@ -241,7 +241,7 @@ protected:
 	DISPMANX_CLAMP_T  dispman_clamp;
 	DISPMANX_TRANSFORM_T dispman_transform;
 	VC_DISPMANX_ALPHA_T	dispman_alpha;
-	
+
 	bool createRPiNativeWindow(const ofRectangle& requestedWindowRect);
 
 #else
@@ -254,7 +254,7 @@ protected:
 	Window x11Window;
 	long x11ScreenNum;  ///< \brief The number of the X11 screen is in use (currently).
 	bool createX11NativeWindow(const ofRectangle& requestedWindowRect);
-	 
+
 //------------------------------------------------------------
 // EVENTS
 //------------------------------------------------------------
@@ -263,7 +263,7 @@ protected:
 
 	void setupNativeUDev();
 	void destroyNativeUDev();
-	
+
 	void setupNativeMouse();
 	void setupNativeKeyboard();
 
@@ -273,6 +273,9 @@ protected:
 	void readNativeMouseEvents();
 	void readNativeKeyboardEvents();
 	void readNativeUDevEvents();
+
+	void handleMouseInputEvents(input_event& ev, bool& axisValuePending);
+	void handleKeyboardInputEvents(input_event& ev);
 
 	static void handleX11Event(const XEvent& event);
 
