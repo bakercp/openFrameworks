@@ -1816,7 +1816,7 @@ void ofAppEGLWindow::readNativeMouseEvents() {
 	bool axisValuePending = false;
 
 	while(nBytesRead >= 0) {
-		handleKeyboardInputEvents(ev, axisValuePending);
+		handleMouseInputEvents(ev, axisValuePending);
 		nBytesRead = read(mouse_fd, &ev,sizeof(struct input_event));
 	}
 
