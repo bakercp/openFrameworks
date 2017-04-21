@@ -40,6 +40,9 @@ fi
 
 if ls example* 1> /dev/null 2>&1; then
     for example in "example*"; do
+        echo ${OF_ROOT}/scripts/templates/$TARGET/Makefile
+        echo ${OF_ROOT}/scripts/templates/$TARGET/config.make
+        echo $example
         cp ${OF_ROOT}/scripts/templates/$TARGET/Makefile $example/
         cp ${OF_ROOT}/scripts/templates/$TARGET/config.make $example/
         if [ ! -f $example/addons.make ]; then
