@@ -45,6 +45,9 @@ if ls example* 1> /dev/null 2>&1; then
         echo $example
         cp ${OF_ROOT}/scripts/templates/$TARGET/Makefile $example/
         cp ${OF_ROOT}/scripts/templates/$TARGET/config.make $example/
+
+        echo "0. -here-"
+
         if [ ! -f $example/addons.make ]; then
             echo "Examples should have an addons.make file with the addon name"
             echo "$example doesn't conatain such file."
@@ -60,7 +63,11 @@ if ls example* 1> /dev/null 2>&1; then
                 echo "this addon and any other that might be needed"
             fi
         fi
+        echo "1. -here-"
+        echo `pwd`
         cd $example
+        echo "2. -here-"
+        echo `pwd`
         if [ "$TARGET" == "android" ]; then
             echo "ABIS_TO_COMPILE_DEBUG = $OPT" >> config.make
             make DebugNoOF PLATFORM_OS=Android
@@ -69,12 +76,22 @@ if ls example* 1> /dev/null 2>&1; then
         elif [ "$TARGET" == "linuxarmv7l" ]; then
             make DebugNoOF PLATFORM_VARIANT=raspberry2
         else
+          echo "3. -here-"
             make DebugNoOF
+            echo "4. -here-"
         fi
         cd ..
+        echo "5. -here-"
     done
+
+    echo "6. -here-"
+
 else
+  echo "7. -here-"
+
     echo "There's no examples to test in this addon. Addons can only be tested"
     echo "when there's at least an example folder which name starts or is example"
     exit 1
 fi
+
+echo "8. -here-"
