@@ -2,8 +2,9 @@
 
 set -e
 
-export OF_ROOT=~/openFrameworks
-cd ${OF_ROOT}/addons/$(basename $TRAVIS_BUILD_DIR)
+# Move into the addon's directory.
+cd ${OF_ROOT}/addons/${OF_ADDON_NAME}
+
 if [ "$TARGET" == "linuxarmv6l" ]; then
     export CXXFLAGS="${CXXFLAGS} -ftrack-macro-expansion=0";
     sed -i "s/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = .*/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = -g0/" ${OF_ROOT}/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk;
@@ -38,6 +39,7 @@ elif [ "$TARGET" == "emscripten" ]; then
     source ~/emscripten-sdk/emsdk_env.sh;
 fi
 
+# Build each example for the current target.
 if ls example* 1> /dev/null 2>&1; then
     for example in example*; do
         echo "cp ${OF_ROOT}/scripts/templates/$TARGET/Makefile $example/"
@@ -73,7 +75,7 @@ if ls example* 1> /dev/null 2>&1; then
         cd ..
     done
 else
-    echo "There's no examples to test in this addon. Addons can only be tested"
+    echo "There are no examples to test in this addon. Addons can only be tested"
     echo "when there's at least an example folder which name starts with or is example"
     exit 1
 fi

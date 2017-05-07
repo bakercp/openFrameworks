@@ -1,12 +1,39 @@
 #!/usr/bin/env bash
 set -e
 
-export OF_ROOT=~/openFrameworks
+# Install the addon in the right location.
+mv $TRAVIS_BUILD_DIR $OF_ROOT/addons/;
 
-cd $OF_ROOT
+# Install target specific dependencies.
 if [ -f scripts/ci/$TARGET/install.sh ]; then
     scripts/ci/$TARGET/install.sh;
 fi
+
+# Install pre-compiled binary of library, rather than recompile.
+mkdir -p $OF_ROOT/libs/openFrameworksCompiled/lib/$TARGET/;
+
+# Move into the target lib directory to download directly into the correct directory.
+cd $OF_ROOT/libs/openFrameworksCompiled/lib/$TARGET/;
+
+if [ "$TARGET" == "android" ]; then
+    # Make android sub-directories.
+    mkdir armv7;
+    mkdir x86;
+    cd armv7;
+    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/armv7/libopenFrameworksDebug.a;
+    cd ../x86;
+    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/x86/libopenFrameworksDebug.a;
+    cd ..;
+elif [ "$TARGET" == "emscripten" ]; then
+    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.bc;
+else
+    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.a;
+fi
+
+# Return to the OF_ROOT.
+cd $OF_ROOT;
+
+# Install 3rd party libraries.
 if [ "$OF_BRANCH" == "master" ]; then
     if [ "$TARGET" == "linux64" ]; then
         # sudo apt-add-repository ppa:ubuntu-toolchain-r/test
@@ -27,30 +54,18 @@ if [ "$OF_BRANCH" == "master" ]; then
     fi
 fi
 
-cd $TRAVIS_BUILD_DIR
-if [ -f scripts/ci/install.sh ]; then
-    scripts/ci/install.sh;
-fi
-if [ -f scripts/ci/$TARGET/install.sh ]; then
-    scripts/ci/$TARGET/install.sh;
+# Install any addon-specific dependencies.
+if [ -f addons/${OF_ADDON_NAME}/scripts/ci/install.sh ]; then
+    addons/${OF_ADDON_NAME}/scripts/ci/install.sh;
 fi
 
-cd ~
-mv $TRAVIS_BUILD_DIR $OF_ROOT/addons/
-mkdir -p $OF_ROOT/libs/openFrameworksCompiled/lib/$TARGET/
-
-cd $OF_ROOT/libs/openFrameworksCompiled/lib/$TARGET/
-if [ "$TARGET" == "android" ]; then
-    mkdir armv7;
-    mkdir x86;
-
-    cd armv7;
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/armv7/libopenFrameworksDebug.a;
-    cd ../x86;
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/x86/libopenFrameworksDebug.a;
-    cd ..;
-elif [ "$TARGET" == "emscripten" ]; then
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.bc;
-else
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.a;
+# Install any addon-platform-specific dependencies.
+if [ -f addons/${OF_ADDON_NAME}/scripts/ci/$TARGET/install.sh ]; then
+    addons/${OF_ADDON_NAME}/scripts/ci/$TARGET/install.sh;
 fi
+
+# Copy project Makefiles into addon example directories.
+for example in addons/${OF_ADDON_NAME}/example*; do
+    cp ${OF_ROOT}/scripts/templates/$TARGET/Makefile $example/
+    cp ${OF_ROOT}/scripts/templates/$TARGET/config.make $example/
+done
