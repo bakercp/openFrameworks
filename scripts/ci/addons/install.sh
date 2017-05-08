@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 set -e
 
+export OF_ROOT=$HOME/openFrameworks
+
+echo $OF_ROOT
+
+export OF_ADDON_NAME=$TRAVIS_BUILD_DIR
+
+echo $OF_ADDON_NAME
+
+
+echo "INSTALL>SH--------------------------------"
+printenv
+
+echo "pwd"
+pwd
+
 # Install the addon in the right location.
 mv $TRAVIS_BUILD_DIR $OF_ROOT/addons/;
 
