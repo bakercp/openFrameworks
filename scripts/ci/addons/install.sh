@@ -2,47 +2,41 @@
 set -e
 
 export OF_ROOT=$HOME/openFrameworks
-
-echo $OF_ROOT
-
 export OF_ADDON_NAME=$TRAVIS_BUILD_DIR
 
-echo $OF_ADDON_NAME
-
-
-echo "INSTALL>SH--------------------------------"
-printenv
-
-echo "pwd"
-pwd
+echo "OF_ROOT: ${OF_ROOT}"
+echo "OF_ADDON_NAME: ${OF_ADDON_NAME}"
 
 # Install the addon in the right location.
-mv $TRAVIS_BUILD_DIR $OF_ROOT/addons/;
+echo "Moving ${OF_ADDON_NAME} to ${OF_ROOT}/addons/"
+mv -v $TRAVIS_BUILD_DIR $OF_ROOT/addons/;
 
 # Install target specific dependencies.
-if [ -f scripts/ci/$TARGET/install.sh ]; then
-    scripts/ci/$TARGET/install.sh;
+echo "Installing dependencies for ${TARGET} from ${OF_ROOT}/addons/"
+if [ -f $OF_ROOT/scripts/ci/$TARGET/install.sh ]; then
+    $OF_ROOT/scripts/ci/$TARGET/install.sh;
 fi
 
 # Install pre-compiled binary of library, rather than recompile.
-mkdir -p $OF_ROOT/libs/openFrameworksCompiled/lib/$TARGET/;
+mkdir -pv $OF_ROOT/libs/openFrameworksCompiled/lib/$TARGET/;
 
 # Move into the target lib directory to download directly into the correct directory.
+echo "Move into the ${OF_ROOT}/libs/openFrameworksCompiled/lib/${TARGET} directory.";
 cd $OF_ROOT/libs/openFrameworksCompiled/lib/$TARGET/;
 
 if [ "$TARGET" == "android" ]; then
     # Make android sub-directories.
-    mkdir armv7;
-    mkdir x86;
+    mkdir -v armv7;
+    mkdir -v x86;
     cd armv7;
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/armv7/libopenFrameworksDebug.a;
+    wget -v http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/armv7/libopenFrameworksDebug.a;
     cd ../x86;
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/x86/libopenFrameworksDebug.a;
+    wget -v http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/x86/libopenFrameworksDebug.a;
     cd ..;
 elif [ "$TARGET" == "emscripten" ]; then
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.bc;
+    wget -v http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.bc;
 else
-    wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.a;
+    wget -v http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.a;
 fi
 
 # Return to the OF_ROOT.
@@ -57,30 +51,39 @@ if [ "$OF_BRANCH" == "master" ]; then
         # sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 1 --force
         # sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 1 --force
         gcc --version
-        scripts/dev/download_libs.sh -a 64;
+        $OF_ROOT/scripts/dev/download_libs.sh -a 64;
     elif [ "$TARGET" == "linuxarmv6l" ]; then
-        scripts/linux/download_libs.sh -a armv6l;
+        $OF_ROOT/scripts/linux/download_libs.sh -a armv6l;
     elif [ "$TARGET" == "linuxarmv7l" ]; then
-        scripts/linux/download_libs.sh -a armv7l;
+        $OF_ROOT/scripts/linux/download_libs.sh -a armv7l;
     elif [ "$TARGET" == "tvos" ]; then
-        scripts/ios/download_libs.sh;
+        $OF_ROOT/scripts/ios/download_libs.sh;
     else
-        scripts/$TARGET/download_libs.sh;
+        $OF_ROOT/scripts/$TARGET/download_libs.sh;
     fi
 fi
 
 # Install any addon-specific dependencies.
-if [ -f addons/${OF_ADDON_NAME}/scripts/ci/install.sh ]; then
-    addons/${OF_ADDON_NAME}/scripts/ci/install.sh;
+echo "Installing shared addon-specific dependencies ..."
+if [ -f $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/install.sh ]; then
+  $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/install.sh;
+else
+  echo "No shared addon-specific dependencies found."
 fi
 
-# Install any addon-platform-specific dependencies.
-if [ -f addons/${OF_ADDON_NAME}/scripts/ci/$TARGET/install.sh ]; then
-    addons/${OF_ADDON_NAME}/scripts/ci/$TARGET/install.sh;
+# Install any platform-specific-addon-specific dependencies.
+echo "Installing platform addon-specific dependencies ..."
+if [ -f $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/$TARGET/install.sh ]; then
+    $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/$TARGET/install.sh;
+else
+  echo "No platform addon-specific dependencies found."
 fi
 
 # Copy project Makefiles into addon example directories.
-for example in addons/${OF_ADDON_NAME}/example*; do
-    cp ${OF_ROOT}/scripts/templates/$TARGET/Makefile $example/
-    cp ${OF_ROOT}/scripts/templates/$TARGET/config.make $example/
+echo "Copy project makefiles into addon examples."
+for example in ${OF_ROOT}/addons/${OF_ADDON_NAME}/example*; do
+    cp -v $OF_ROOT/scripts/templates/$TARGET/Makefile $example/
+    cp -v $OF_ROOT/scripts/templates/$TARGET/config.make $example/
 done
+
+echo "install.sh finished."
