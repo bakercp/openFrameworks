@@ -6,7 +6,7 @@ if [ $EUID != 0 ]; then
 	echo "usage:"
 	echo "sudo "$0
 	exit $exit_code
-   exit 1
+	exit 1
 fi
 
 apt-get -qq update
@@ -35,7 +35,7 @@ fi
 
 
 echo "installing OF dependencies"
-apt-get -qq install freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libgl1-mesa-dev libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev libopencv-dev libegl1-mesa-dev libgles1-mesa-dev libgles2-mesa-dev libassimp-dev librtaudio-dev libboost-filesystem-dev libglfw3-dev  liburiparser-dev libcurl4-openssl-dev libpugixml-dev
+apt-get -qq install realpath freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libgl1-mesa-dev libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libgtk${GTK_VERSION}-dev libopencv-dev libegl1-mesa-dev libgles1-mesa-dev libgles2-mesa-dev libassimp-dev librtaudio-dev libboost-filesystem-dev libglfw3-dev  liburiparser-dev libcurl4-openssl-dev libpugixml-dev
 exit_code=$?
 if [ $exit_code != 0 ]; then
     echo "error installing dependencies, there could be an error with your internet connection"
@@ -55,7 +55,7 @@ fi
 if [ -f /opt/vc/include/bcm_host.h ]; then
     echo "detected Raspberry Pi"
     echo "installing gstreamer omx"
-    apt-get install  gstreamer${GSTREAMER_VERSION}-omx
+    apt-get install gstreamer${GSTREAMER_VERSION}-omx
 fi
 
 OS_CODENAME=$(cat /etc/os-release | grep VERSION= | sed "s/VERSION\=\"\(.*\)\"/\1/")
