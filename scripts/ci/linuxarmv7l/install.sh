@@ -16,11 +16,11 @@ trapError() {
 }
 
 createArchImg(){
-    #sudo apt-get -qq install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libasound2-dev > /dev/null
+    #sudo apt-get -qq install -y realpath gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libasound2-dev > /dev/null
 
     #sudo apt-get -qq -y update > /dev/null
     #sudo apt-get -qq -f -y --force-yes dist-upgrade > /dev/null
-    #sudo apt-get -qq install -y libgssapi-krb5-2 libkrb5-3 libidn11 > /dev/null
+    #sudo apt-get -qq install -y realpath libgssapi-krb5-2 libkrb5-3 libidn11 > /dev/null
     #sudo ./arch-bootstrap.sh archlinux
 
     if [ ! "$(ls -A ~/archlinux)" ] || [ $(age ~/archlinux/timestamp) -gt 7 ]; then
