@@ -12,8 +12,8 @@ trapError() {
 }
 
 installPackages(){
-    sudo apt-get -qq -y update
-    sudo apt-get -qq -y install multistrap unzip
+    sudo apt-get -qq -y update > /dev/null
+    sudo apt-get -qq -y install multistrap unzip > /dev/null
     #workaround for https://bugs.launchpad.net/ubuntu/+source/multistrap/+bug/1313787
     sudo sed -i s/\$forceyes//g /usr/sbin/multistrap
 }

@@ -9,12 +9,6 @@ if [ $EUID != 0 ]; then
     exit 1
 fi
 
-if [ "$1" == "-y" ]; then
-    FORCE_YES=-y
-else
-    FORCE_YES=""
-fi
-
 function installPackages {
     for pkg in $@; do
         echo "Installing ${pkg}"
@@ -26,7 +20,11 @@ function installPackages {
             exit_code=$?
             echo "$error" | grep Remv > /dev/null
             if [ $? -eq 0 ]; then
-                apt-get -qq install ${FORCE_YES} ${pkg}
+                if [ "$1" == "-y" ]; then
+                  apt-get -qq install -y ${pkg} > /dev/null
+                else
+                  apt-get -qq install ${pkg}
+                fi
                 exit_code=$?
                 if [ $exit_code != 0 ]; then
                     echo "error installing ${pkg}, there could be an error with your internet connection"
@@ -34,7 +32,7 @@ function installPackages {
                     exit $exit_code
                 fi
             elif [ $exit_code -eq 0 ]; then
-                apt-get -qq -y install ${pkg}
+                apt-get -qq -y install ${pkg} > /dev/null
                 exit_code=$?
                 if [ $exit_code != 0 ]; then
                     echo "error installing ${pkg}, there could be an error with your internet connection"
@@ -76,14 +74,14 @@ if [ $MAJOR_VERSION -lt 12 ]; then
     echo "Your ubuntu version is too old try using an older version of openFrameworks or updating your system"
     exit 1
 elif [ $MAJOR_VERSION -lt 13 ]; then
-    add-apt-repository ppa:ubuntu-toolchain-r/test --yes
-    add-apt-repository ppa:gstreamer-developers/ppa --yes
-    add-apt-repository ppa:boost-latest/ppa --yes
+    add-apt-repository ppa:ubuntu-toolchain-r/test --yes > /dev/null
+    add-apt-repository ppa:gstreamer-developers/ppa --yes > /dev/null
+    add-apt-repository ppa:boost-latest/ppa --yes > /dev/null
     CXX_VER=-4.9
     BOOST_VER=1.55
 elif [[ $MAJOR_VERSION -lt 14 || ($MAJOR_VERSION -eq 14 && $MINOR_VERSION -eq 4) ]]; then
-    add-apt-repository ppa:ubuntu-toolchain-r/test --yes
-    add-apt-repository ppa:boost-latest/ppa --yes
+    add-apt-repository ppa:ubuntu-toolchain-r/test --yes > /dev/null
+    add-apt-repository ppa:boost-latest/ppa --yes > /dev/null
     CXX_VER=-4.9
     BOOST_VER=1.55
 else
@@ -154,7 +152,7 @@ else
 
     # tools for git use
     GLFW_GIT_TAG=$GLFW_VER
-    apt-get -qq install -y libxrandr-dev libxinerama-dev libxcursor-dev cmake
+    apt-get -qq install -y libxrandr-dev libxinerama-dev libxcursor-dev cmake > /dev/null
     wget https://github.com/glfw/glfw/archive/$GLFW_GIT_TAG.tar.gz -O glfw-$GLFW_GIT_TAG.tar.gz
     tar -xf glfw-$GLFW_GIT_TAG.tar.gz
 	mv glfw-$GLFW_GIT_TAG glfw
@@ -203,6 +201,6 @@ if [[ $MAJOR_VERSION -lt 14 || ($MAJOR_VERSION -eq 14 && $MINOR_VERSION -eq 4) ]
 	    fi
 	fi
 	echo "setting gcc-${CXX_VER} as default compiler"
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc${CXX_VER} 1 --force
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++${CXX_VER} 1 --force
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc${CXX_VER} 1 --force > /dev/null
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++${CXX_VER} 1 --force > /dev/null
 fi
