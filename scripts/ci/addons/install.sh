@@ -2,7 +2,7 @@
 set -e
 
 export OF_ROOT=$HOME/openFrameworks
-export OF_ADDON_NAME=$TRAVIS_BUILD_DIR
+export OF_ADDON_NAME=$(basename ${TRAVIS_BUILD_DIR})
 
 echo "OF_ROOT: ${OF_ROOT}"
 echo "OF_ADDON_NAME: ${OF_ADDON_NAME}"
