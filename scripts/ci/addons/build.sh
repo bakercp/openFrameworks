@@ -3,7 +3,7 @@
 set -e
 
 # Move into the addon's directory.
-cd ${OF_ROOT}/addons/${OF_ADDON_NAME}
+cd $OF_ROOT/addons/$ADDON_NAME
 
 if [ "$TARGET" == "linuxarmv6l" ]; then
     export CXXFLAGS="${CXXFLAGS} -ftrack-macro-expansion=0";

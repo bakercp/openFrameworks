@@ -2,13 +2,13 @@
 set -e
 
 export OF_ROOT=$HOME/openFrameworks
-export OF_ADDON_NAME=$(basename ${TRAVIS_BUILD_DIR})
+export ADDON_NAME=$(basename ${TRAVIS_BUILD_DIR})
 
 echo "OF_ROOT: ${OF_ROOT}"
-echo "OF_ADDON_NAME: ${OF_ADDON_NAME}"
+echo "ADDON_NAME: ${ADDON_NAME}"
 
 # Install the addon in the right location.
-echo "Moving ${OF_ADDON_NAME} to ${OF_ROOT}/addons/"
+echo "Moving ${ADDON_NAME} to ${OF_ROOT}/addons/"
 mv -v $TRAVIS_BUILD_DIR $OF_ROOT/addons/;
 
 # Install target specific dependencies.
@@ -65,23 +65,23 @@ fi
 
 # Install any addon-specific dependencies.
 echo "Installing shared addon-specific dependencies ..."
-if [ -f $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/install.sh ]; then
-  $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/install.sh;
+if [ -f $OF_ROOT/addons/$ADDON_NAME/scripts/ci/install.sh ]; then
+  $OF_ROOT/addons/$ADDON_NAME/scripts/ci/install.sh;
 else
   echo "No shared addon-specific dependencies found."
 fi
 
 # Install any platform-specific-addon-specific dependencies.
 echo "Installing platform addon-specific dependencies ..."
-if [ -f $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/$TARGET/install.sh ]; then
-    $OF_ROOT/addons/$OF_ADDON_NAME/scripts/ci/$TARGET/install.sh;
+if [ -f $OF_ROOT/addons/$ADDON_NAME/scripts/ci/$TARGET/install.sh ]; then
+    $OF_ROOT/addons/$ADDON_NAME/scripts/ci/$TARGET/install.sh;
 else
   echo "No platform addon-specific dependencies found."
 fi
 
 # Copy project Makefiles into addon example directories.
 echo "Copy project makefiles into addon examples."
-for example in ${OF_ROOT}/addons/${OF_ADDON_NAME}/example*; do
+for example in ${OF_ROOT}/addons/${ADDON_NAME}/example*; do
     cp -v $OF_ROOT/scripts/templates/$TARGET/Makefile $example/
     cp -v $OF_ROOT/scripts/templates/$TARGET/config.make $example/
 done
