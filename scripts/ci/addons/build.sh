@@ -2,21 +2,27 @@
 
 set -e
 
+export OF_ROOT=$HOME/openFrameworks
+export ADDON_NAME=$(basename ${TRAVIS_BUILD_DIR})
+
+echo "OF_ROOT: ${OF_ROOT}"
+echo "ADDON_NAME: ${ADDON_NAME}"
+
 # Move into the addon's directory.
 cd $OF_ROOT/addons/$ADDON_NAME
 
 if [ "$TARGET" == "linuxarmv6l" ]; then
     export CXXFLAGS="${CXXFLAGS} -ftrack-macro-expansion=0";
-    sed -i "s/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = .*/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = -g0/" ${OF_ROOT}/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk;
+    sed -i "s/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = .*/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = -g0/" $OF_ROOT/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk;
     export GCC_PREFIX=arm-linux-gnueabihf;
     export GST_VERSION=1.0;
-    export RPI_ROOT=${OF_ROOT}/scripts/ci/${TARGET}/raspbian;
-    export TOOLCHAIN_ROOT=${OF_ROOT}/scripts/ci/${TARGET}/rpi_toolchain;
+    export RPI_ROOT=$OF_ROOT/scripts/ci/$TARGET/raspbian;
+    export TOOLCHAIN_ROOT=$OF_ROOT/scripts/ci/$TARGET/rpi_toolchain;
     export PLATFORM_OS=Linux;
     export PLATFORM_ARCH=armv6l;
-    export PKG_CONFIG_LIBDIR=${RPI_ROOT}/usr/lib/pkgconfig:${RPI_ROOT}/usr/lib/${GCC_PREFIX}/pkgconfig:${RPI_ROOT}/usr/share/pkgconfig;
+    export PKG_CONFIG_LIBDIR=$RPI_ROOT/usr/lib/pkgconfig:$RPI_ROOT/usr/lib/$GCC_PREFIX/pkgconfig:$RPI_ROOT/usr/share/pkgconfig;
 elif [ "$TARGET" == "linuxarmv7l" ]; then
-    sed -i "s/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = .*/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = -g0/" ${OF_ROOT}/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk;
+    sed -i "s/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = .*/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = -g0/" $OF_ROOT/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk;
     export GCC_PREFIX=armv7l-unknown-linux-gnueabihf;
     export TOOLCHAIN_PREFIX=arm-linux-gnueabihf;
     export GST_VERSION=1.0;
@@ -25,27 +31,27 @@ elif [ "$TARGET" == "linuxarmv7l" ]; then
     export PLATFORM_OS=Linux;
     export PLATFORM_ARCH=armv7l;
     export PKG_CONFIG_DIR=;
-    export PKG_CONFIG_LIBDIR=${RPI_ROOT}/usr/lib/pkgconfig:${RPI_ROOT}/usr/share/pkgconfig;
-    export PKG_CONFIG_SYSROOT_DIR=${RPI_ROOT};
+    export PKG_CONFIG_LIBDIR=$RPI_ROOT/usr/lib/pkgconfig:$RPI_ROOT/usr/share/pkgconfig;
+    export PKG_CONFIG_SYSROOT_DIR=$RPI_ROOT;
     export CXX=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-g++;
     export CC=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-gcc;
     export AR=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-ar;
     export LD=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-ld;
-    export CFLAGS="$CFLAGS --sysroot=${RPI_ROOT}";
-    export CXXFLAGS="$CXXFLAGS --sysroot=${RPI_ROOT}";
+    export CFLAGS="${CFLAGS} --sysroot=${RPI_ROOT}";
+    export CXXFLAGS="${CXXFLAGS} --sysroot=${RPI_ROOT}";
     export CXXFLAGS="${CXXFLAGS} -ftrack-macro-expansion=0";
 elif [ "$TARGET" == "emscripten" ]; then
-    sed -i "s/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = .*/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = -g0/" ${OF_ROOT}/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk;
+    sed -i "s/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = .*/PLATFORM_OPTIMIZATION_CFLAGS_DEBUG = -g0/" $OF_ROOT/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk;
     source ~/emscripten-sdk/emsdk_env.sh;
 fi
 
 # Build each example for the current target.
 if ls example* 1> /dev/null 2>&1; then
     for example in example*; do
-        echo "cp ${OF_ROOT}/scripts/templates/$TARGET/Makefile $example/"
-        cp ${OF_ROOT}/scripts/templates/$TARGET/Makefile $example/
-        echo "cp ${OF_ROOT}/scripts/templates/$TARGET/config.make $example/"
-        cp ${OF_ROOT}/scripts/templates/$TARGET/config.make $example/
+        echo "cp ${OF_ROOT}/scripts/templates/${TARGET}/Makefile $example/"
+        cp -v $OF_ROOT/scripts/templates/$TARGET/Makefile $example/
+        echo "cp ${OF_ROOT}/scripts/templates/${TARGET}/config.make $example/"
+        cp -v $OF_ROOT/scripts/templates/$TARGET/config.make $example/
         if [ ! -f $example/addons.make ]; then
             echo "Examples should have an addons.make file with the addon name"
             echo "$example doesn't conatain such file."
@@ -54,7 +60,7 @@ if ls example* 1> /dev/null 2>&1; then
             echo "needed"
             exit 1
         else
-            if ! grep $(basename $TRAVIS_BUILD_DIR) $example/addons.make; then
+            if ! grep $(basename ${TRAVIS_BUILD_DIR}) $example/addons.make; then
                 echo "$example contains an addons.make file but it doesn't seem"
                 echo "to contain the name of this addon, this will probably fail"
                 echo "Please check that the addons.make file contains the name of"
