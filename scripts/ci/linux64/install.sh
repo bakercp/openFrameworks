@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ev
+set -e
 
 if [ -z ${OF_ROOT} ]; then
     OF_ROOT=${TRAVIS_BUILD_DIR:-"$( cd "$(dirname "$0")/../../.." ; pwd -P )"}

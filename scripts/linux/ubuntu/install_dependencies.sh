@@ -26,7 +26,7 @@ function installPackages {
             exit_code=$?
             echo "$error" | grep Remv > /dev/null
             if [ $? -eq 0 ]; then
-                apt-get install ${FORCE_YES} ${pkg}
+                apt-get -qq install ${FORCE_YES} ${pkg}
                 exit_code=$?
                 if [ $exit_code != 0 ]; then
                     echo "error installing ${pkg}, there could be an error with your internet connection"
@@ -34,7 +34,7 @@ function installPackages {
                     exit $exit_code
                 fi
             elif [ $exit_code -eq 0 ]; then
-                apt-get -y -qq install ${pkg}
+                apt-get -qq -y install ${pkg}
                 exit_code=$?
                 if [ $exit_code != 0 ]; then
                     echo "error installing ${pkg}, there could be an error with your internet connection"
@@ -91,7 +91,7 @@ else
     BOOST_VER=
 fi
 
-apt-get update
+apt-get -qq update
 REGULAR_UPDATES=$(/usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 1)
 SECURITY_UPDATES=$(/usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 2)
 
@@ -104,7 +104,7 @@ if [ "$1" != "-y" ]; then
                 exit 0
             fi
         else
-            apt-get dist-upgrade
+            apt-get -qq dist-upgrade
         fi
     fi
 fi
@@ -154,7 +154,7 @@ else
 
     # tools for git use
     GLFW_GIT_TAG=$GLFW_VER
-    apt-get install -y -qq libxrandr-dev libxinerama-dev libxcursor-dev cmake
+    apt-get -qq install -y libxrandr-dev libxinerama-dev libxcursor-dev cmake
     wget https://github.com/glfw/glfw/archive/$GLFW_GIT_TAG.tar.gz -O glfw-$GLFW_GIT_TAG.tar.gz
     tar -xf glfw-$GLFW_GIT_TAG.tar.gz
 	mv glfw-$GLFW_GIT_TAG glfw

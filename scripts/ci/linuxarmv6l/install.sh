@@ -12,8 +12,8 @@ trapError() {
 }
 
 installPackages(){
-    sudo apt-get -y update
-    sudo apt-get -y install multistrap unzip
+    sudo apt-get -qq -y update
+    sudo apt-get -qq -y install multistrap unzip
     #workaround for https://bugs.launchpad.net/ubuntu/+source/multistrap/+bug/1313787
     sudo sed -i s/\$forceyes//g /usr/sbin/multistrap
 }
@@ -30,23 +30,23 @@ downloadToolchain(){
 
 downloadFirmware(){
     wget https://github.com/raspberrypi/firmware/archive/master.zip -O firmware.zip
-    unzip firmware.zip
+    unzip -qq firmware.zip
     cp -r firmware-master/opt raspbian/
     rm -r firmware-master
     rm firmware.zip
 }
 
 relativeSoftLinks(){
-    for link in $(ls -la | grep "\-> /" | sed "s/.* \([^ ]*\) \-> \/\(.*\)/\1->\/\2/g"); do 
-        lib=$(echo $link | sed "s/\(.*\)\->\(.*\)/\1/g"); 
-        link=$(echo $link | sed "s/\(.*\)\->\(.*\)/\2/g"); 
+    for link in $(ls -la | grep "\-> /" | sed "s/.* \([^ ]*\) \-> \/\(.*\)/\1->\/\2/g"); do
+        lib=$(echo $link | sed "s/\(.*\)\->\(.*\)/\1/g");
+        link=$(echo $link | sed "s/\(.*\)\->\(.*\)/\2/g");
         rm $lib
-        ln -s ../../..$link $lib 
+        ln -s ../../..$link $lib
     done
 
-    for f in *; do 
-        error=$(grep " \/lib/" $f > /dev/null 2>&1; echo $?) 
-        if [ $error -eq 0 ]; then 
+    for f in *; do
+        error=$(grep " \/lib/" $f > /dev/null 2>&1; echo $?)
+        if [ $error -eq 0 ]; then
             sed -i "s/ \/lib/ ..\/..\/..\/lib/g" $f
             sed -i "s/ \/usr/ ..\/..\/..\/usr/g" $f
         fi
