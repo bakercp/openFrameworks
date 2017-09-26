@@ -151,6 +151,13 @@ class ofTouchEventArgs : public ofEventArgs, public glm::vec2 {
 		cancel
 	};
 
+    enum PointerType {
+        mouse,
+        pen,
+        touch,
+        unknown
+    };
+
 	ofTouchEventArgs()
 	:type(down)
 	,id(0)
@@ -166,9 +173,7 @@ class ofTouchEventArgs : public ofEventArgs, public glm::vec2 {
 	,yspeed(0)
 	,xaccel(0)
 	,yaccel(0)
-	{
-
-	}
+    ,pointerType(touch){}
 
 	ofTouchEventArgs(Type type, float x, float y, int id)
 	:glm::vec2(x,y)
@@ -185,7 +190,8 @@ class ofTouchEventArgs : public ofEventArgs, public glm::vec2 {
 	,xspeed(0)
 	,yspeed(0)
 	,xaccel(0)
-	,yaccel(0){}
+	,yaccel(0)
+    ,pointerType(touch){}
 
 	Type type;
 	int id;
@@ -197,6 +203,7 @@ class ofTouchEventArgs : public ofEventArgs, public glm::vec2 {
 	float pressure;
 	float xspeed, yspeed;
 	float xaccel, yaccel;
+    PointerType pointerType;
 };
 
 class ofResizeEventArgs : public ofEventArgs {
