@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 set -e
 
+echo "ABC 123"
+
 export OF_ROOT=~/openFrameworks
 
 cd $OF_ROOT
+
+echo "Checking for"
+echo scripts/ci/$TARGET/install.sh
+
 if [ -f scripts/ci/$TARGET/install.sh ]; then
     scripts/ci/$TARGET/install.sh;
 fi
+
 if [ "$OF_BRANCH" == "master" ]; then
     if [ "$TARGET" == "linux64" ]; then
         # sudo apt-add-repository ppa:ubuntu-toolchain-r/test
