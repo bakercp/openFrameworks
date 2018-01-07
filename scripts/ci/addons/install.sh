@@ -51,6 +51,8 @@ if [ "$TARGET" == "android" ]; then
     cd ..;
 elif [ "$TARGET" == "emscripten" ]; then
     wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.bc;
+elif [ "$TARGET" == "osx" ]; then
+    echo "Skipping download for osx."
 else
     wget http://ci.openframeworks.cc/openFrameworks_libs/$TARGET/libopenFrameworksDebug.a;
 fi

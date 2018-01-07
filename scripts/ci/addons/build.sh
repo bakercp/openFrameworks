@@ -79,6 +79,10 @@ if ls example* 1> /dev/null 2>&1; then
         elif [ "$TARGET" == "linuxarmv7l" ]; then
             #make DebugNoOF PLATFORM_VARIANT=raspberry2
             junest ./build_junest.sh $(cd $example; pwd -P)
+        elif [ "$TARGET" == "osx" ]; then
+            cd $example
+            make Debug
+            cd ..
         else
             cd $example
             make DebugNoOF
