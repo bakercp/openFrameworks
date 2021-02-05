@@ -34,6 +34,9 @@ PG_BRANCH=master
 
 hostArch=`uname`
 
+SCRIPT_DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$SCRIPT_DIR" ]]; then SCRIPT_DIR="$PWD"; fi
+. "$SCRIPT_DIR/downloader.sh"
 
 isRunning(){
     if [ “$hostArch” == “Linux” ]; then
@@ -133,6 +136,9 @@ fi
 
 cd $packageroot
 
+SCRIPT_DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$SCRIPT_DIR" ]]; then SCRIPT_DIR="$PWD"; fi
+. "$SCRIPT_DIR/../../dev/downloader.sh"
 
 function deleteCodeblocks {
     #delete codeblock files
@@ -172,7 +178,7 @@ function createProjectFiles {
         mkdir -p ${main_ofroot}/libs/openFrameworksCompiled/lib/linux64/
         cd ${main_ofroot}/libs/openFrameworksCompiled/lib/linux64/
         rm -f ${main_ofroot}/libs/openFrameworksCompiled/lib/linux64/libopenFrameworksDebug.a
-        wget http://ci.openframeworks.cc/openFrameworks_libs/linux64/libopenFrameworksDebug.a
+        downloader http://ci.openframeworks.cc/openFrameworks_libs/linux64/libopenFrameworksDebug.a
 
         cd ${main_ofroot}/apps/projectGenerator
         git pull origin $PG_BRANCH
@@ -195,6 +201,10 @@ function createProjectFiles {
             pg_platform=$pkg_platform
         fi
         ${main_ofroot}/apps/projectGenerator/commandLine/bin/projectGenerator_debug --recursive -p${pg_platform} -o$pkg_ofroot $pkg_ofroot/examples > /dev/null
+        
+        #fix config.make because the project generator is putting in the full path to the OF_ROOT as it is designed to do.
+        #in this case we actually don't want to set it as the default of ../../../ is fine.
+        find $pkg_ofroot/examples -name "config.make" -type f -exec sed -i 's/^OF_ROOT =.*/# OF_ROOT = ..\/..\/..\//' {} \;
     elif [ "$pkg_platform" == "linuxarmv6l" ] || [ "$pkg_platform" == "linuxarmv7l" ]; then
         for example_group in $pkg_ofroot/examples/*; do
             for example in $example_group/*; do
@@ -409,7 +419,7 @@ function createPackage {
 		cd ${pkg_ofroot}
 		rm -rf apps/projectGenerator
 		cd ${pkg_ofroot}/projectGenerator-vs/resources/app/app/
-		wget http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip 2> /dev/null
+		downloader http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
 		unzip projectGenerator-vs.zip 2> /dev/null
 		rm projectGenerator-vs.zip
 		cd ${pkg_ofroot}
@@ -417,20 +427,23 @@ function createPackage {
 	fi
 
     if [ "$pkg_platform" = "osx" ]; then
-		wget http://ci.openframeworks.cc/projectGenerator/projectGenerator-osx.zip 2> /dev/null
-        unzip projectGenerator-osx.zip
-        mv projectGenerator-osx projectGenerator
-        rm projectGenerator-osx.zip
-        sed -i "s/osx/$pkg_platform/g" projectGenerator/projectGenerator.app/Contents/Resources/app/settings.json
+		downloader http://ci.openframeworks.cc/projectGenerator/projectGenerator-osx.zip 2> /dev/null
+        	unzip projectGenerator-osx.zip
+        	mv projectGenerator-osx projectGenerator
+        	rm projectGenerator-osx.zip
+        	sed -i "s/osx/$pkg_platform/g" projectGenerator/projectGenerator.app/Contents/Resources/app/settings.json
 		rm -rf apps/projectGenerator
+
+
 	fi
 
     if [ "$pkg_platform" = "ios" ]; then
-		wget http://ci.openframeworks.cc/projectGenerator/projectGenerator-ios.zip 2> /dev/null
-        unzip projectGenerator-ios.zip
-        mv projectGenerator-ios projectGenerator
-        rm projectGenerator-ios.zip
+		downloader http://ci.openframeworks.cc/projectGenerator/projectGenerator-ios.zip 2> /dev/null
+        	unzip projectGenerator-ios.zip
+        	mv projectGenerator-ios projectGenerator
+        	rm projectGenerator-ios.zip
 		rm -rf apps/projectGenerator
+		sed -i "s/osx/ios/g" projectGenerator/projectGenerator.app/Contents/Resources/app/settings.json
 	fi
 
 	if [ "$pkg_platform" = "linux" ]; then
@@ -463,7 +476,7 @@ function createPackage {
 		cd ${pkg_ofroot}
 		sed -i "s/osx/android/g" projectGenerator-windows/resources/app/settings.json
 
-		wget http://ci.openframeworks.cc/projectGenerator/projectGenerator-android.zip 2> /dev/null
+		downloader http://ci.openframeworks.cc/projectGenerator/projectGenerator-android.zip 2> /dev/null
         unzip projectGenerator-android.zip
 		mv projectGenerator-android projectGenerator-osx
         rm projectGenerator-android.zip
